@@ -2,8 +2,6 @@
 .idea/
 *.iml
 
-data/
-
 __pycache__
 
 # Python packaging
@@ -14,4 +12,11 @@ dist/
 
 # Training outputs
 logs/
+
+# Ignore datasets
+data/
+!src/ctrlcv/data
+
+# Ignore models
 models/
+!src/ctrlcv/models/
