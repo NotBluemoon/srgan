@@ -1,0 +1,17 @@
+.venv/
+.idea/
+*.iml
+
+data/
+
+__pycache__
+
+# Python packaging
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Training outputs
+logs/
+models/

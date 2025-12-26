@@ -1,0 +1,4 @@
+[project]
+name = "ctrlcv"
+version = "1.0.0"
+description = "Technical test for ctrlcv role"
