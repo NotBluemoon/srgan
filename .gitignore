@@ -12,11 +12,11 @@ dist/
 
 # Training outputs
 logs/
+models/
 
 # Ignore datasets
 data/
 !src/ctrlcv/data
 
-# Ignore models
-models/
-!src/ctrlcv/models/
+# Ignore output
+outputs/
