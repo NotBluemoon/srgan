@@ -2,3 +2,4 @@
 name = "srgan"
 version = "0.7.0"
 description = "Technical test for ctrlcv role"
+requires-python = ">=3.12"
