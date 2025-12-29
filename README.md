@@ -1,20 +1,30 @@
 <a id="readme-top"></a>
 
 # SRGAN – Super Resolution Generative Adversarial Network
+
+---
 Implementation of SRGAN x4 (Super Resolution GAN) faithful to the [2017 SRGAN paper by Ledig et al](https://arxiv.org/abs/1609.04802). 
 My goal is to develop a clean PyTorch project that I can use as a reference in the future.
+---
 
-### Built With
 * [![PyTorch][pytorch-shield]][pytorch-url]
 * [![Python][python-shield]][python-url]
 * [![Dataset][div2k-shield]][div2k-url]
-
+---
 
 
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
   <ol>
+    <li>
+      <a href="#about_the_project">About The Project</a>
+      <ul>
+            <li><a href="#changed-parameters">Changed Parameters</a></li>
+            <li><a href="#unchanged-parameters">Unchanged Parameters</a></li>
+            <li><a href="#results">Results</a></li>
+      </ul>
+    </li>
     <li>
       <a href="#getting-started">Getting Started</a>
         <ul>
@@ -33,18 +43,20 @@ My goal is to develop a clean PyTorch project that I can use as a reference in t
   </ol>
 </details>
 
-
+---
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
+
+---
 This SRGAN is implemented according to the research paper with minimal changes. Since a lot of work has been done on improving
 SRGAN since its introduction, some architecture or parameter choices
-may not be the most optimal according to today's standard. The changed choices, along with eplxicit choices mentioned in the paper
+may not be the most optimal according to today's standard. The changes made in the implementation and explicit choices mentioned in the paper
 are described below.
-
-### Changed 
+---
+### Changed Parameters
 * ``Train dataset: ImageNet Random 350k subset (BRG) -> DIV2K 800 (RGB)``  
-    * Changed to accomodate project requirements, models are trained on RGB instead of BRG
+    * Changed to accommodate project requirements, models are trained on RGB instead of BRG
 * ``Pretrain steps: 1_000_000 -> 2286``
     * Scaled according to dataset size, not final as the model is not learning enough
 * ``Train steps: 200_000 -> 257``
@@ -54,15 +66,23 @@ are described below.
 * ``Mean-opinion-score (MOS) test metric not used``
     * No human participants involved
 
-### Unchanged
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+---
+### Unchanged Parameters
+
+---
 #### Data
 * ``Scaling factor = 4``
 * ``Crop size: 96 x 96 for HR images, 24 x 24 for LR images``
 * ``Range of LR images: [0, 1], HR images: [-1, 1]``
 
+---
 #### Model Architecture
 * ``Number of residual blocks B = 16``
 * ``Leaky ReLU α = 0.2``
+
+---
 
 #### Training
 * ``Adam β1 = 0.9``
@@ -79,7 +99,8 @@ $$
 \phi_{i,j}(G_{\theta_G}(I^{LR}))_{x,y}
 \right)^2
 $$
-    * Mean squared loss between the features of reconstructed and reference image, extracted with VGG54 derived from VGG19, then scaled with a factor of 1/12.75 to match pixel loss.
+    * Mean squared loss between the features of reconstructed and reference image, extracted with VGG54 derived from VGG19, 
+then scaled with a factor of 1/12.75 to match pixel loss. <br></br>
 * ``Adversarial loss:``
 $$
 \mathcal{l}_{\text{adv}} =
@@ -89,83 +110,144 @@ $$
 $$
     * Achieved using binary cross entropy with target tensor set to 1 and reduction set to sum
 
+---
+
 #### Test Metrics
 All metrics are calculated on the y-channel of center cropped, remove of a 4-pixel wide strip from each border (extracted from SRGAN paper)
 * ``Peak Signal-to-Noise Ratio (PSNR)``
 * ``Structure Similarity Index (SSIM)``
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+---
+
 ### Results
-To be added as a satisfactory model has not been trained.
+To be added, as a satisfactory model has not been trained.
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+---
 
 <!-- GETTING STARTED -->
 ## Getting Started
+
+---
+
 ### Project Structure
 ```
-SRGAN/
+srgan/
 │
-├── data/
-│
+├── data/                                   # dataset directory (ignored by Git)
 ├── src/
 │   └── srgan/
-│       ├── data/
-│       ├── models/
-│   
-├── train.py
+│       ├── data/                           # dataset loader 
+│       │   └── div2k.py
+│       ├── models/                         # SRGAN model components
+│       │   ├── discriminator.py           
+│       │   ├── feature_extractor.py
+│       │   └── generator.py
+│       ├── configs.py                      # SRGAN components
+│       ├── helpers.py                      # helper functions for loading models, logging etc
+│       ├── infer.py
+│       ├── pretrain.py                     # pretrains SRGAN generator
+│       ├── test.py
+│       └── train.py 
+├── train.py                                # CLI entrypoints for training, inference and testing
 ├── test.py
-├── utils.py
+├── infer.py
 ├── requirements.txt
 └── README.md
 ```
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+---
 ### Installation
 ```
 git clone https://github.com/NotBluemoon/SRGAN.git
-cd SRGAN
+cd srgan
 pip install -r requirements.txt
 ```
 
+---
 ### Dataset
-#### Train Dataset
-For this implementation, the DIV2K bicubic subset with a
-scale factor `X4` is used to train the network. The SRGAN paper downsamples HR images from the ImageNet database using bicubic kernel with downsampling factor `r = 4`.
+The train dataset [(DIV2K)](https://data.vision.ee.ethz.ch/cvl/DIV2K/) and test dataset [(Set14)](https://www.kaggle.com/datasets/guansuo/set14dataset?resource=download) should be put in the `data/` directory of the project root. The `data/` directory
+should be structured as below:
 ```
 data/
-└── DIV2K/
-    ├── DIV2K_train_HR
-    ├── DIV2K_train_LR_bicubic
+├── DIV2K/
+│   ├── DIV2K_train_HR/
+│   └── DIV2K_train_LR_bicubic/
+│       └── 4X/   
+└── Set14/
+    └── image_SRF_4/
 
 ```
-#### Test Dataset
-Currently the implementation only supports using Set14 with a scale factor of 4 as test dataset, and it should be put in the data folder at project root
 
-### Training
-```
-python train.py --device auto --batch_size 16 --lr 0.0001 --b1 0.90 --b2 0.999 --checkpoint_interval 5000 --pretrain_steps 100_000 --train_steps 200_000 --num_res_blocks 16
-```
-Running `python train.py` will use the default parameters which are the ones used in the SRGAN paper.
-The only parameter changed from the paper is the pretraining steps and training steps since a different dataset is used.
-
-Note that the `--resume` should only be used if `pretrain_steps` and `train_steps` are unchanged. It should only
-be used in case the training was interrupted and no other parameters are changed.
-
-For both `pretrain_steps` and `train_steps`, the value is scaled according 800/350000 to the dataset size used, in which the paper used 350k images
-from ImageNet and this implementation uses only 800 images from DIV2K.
-
-
-
-### Inference
-```
-python test.py --image path/to/image.jpg
-```
-Output will be saved in `results/`.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+---
+### Training
+```
+python train.py --pretrain_steps 100 --train_steps 50 --checkpoint_interval 25
+```
 
+Running only `python train.py` will use the default parameters mentioned above. As the model will take some time to train and 
+a satisfactory model has not been trained yet, it is recommended to use the above line to test the project.
 
+An `outputs` directory will be created, containing model checkpoints, log files and the final pretrained generator. The final
+SRGAN model will be saved in the `models` directory.
+---
+#### Training Arguments
+
+| Argument | Default | Description                                                                                                                                                 |
+|---------|---------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `--resume` | False | If specified, resume training from exisiting checkpoints. Should only be used in case of an accidental interruption while training as parameters need to remain the same. |
+| `--device` | `auto` | `auto` (chooses CUDA if available), `cpu`, or `cuda`.                                                                                                       |
+| `--dataset_name` | `DIV2K` | Name of the dataset to be used for training.                                                                                                                |
+| `--batch_size` | 16 | Number of training samples per batch.                                                                                                                       |
+| `--lr` | 0.0001 | Learning rate for Adam optimizer.                                                                                |
+| `--b1` | 0.90 | Adam first moment decay (β₁).                                                                                               |
+| `--b2` | 0.999 | Adam second moment decay (β₂).                                                                                                                              |
+| `--channels` | 3 | Number of image color channels (RGB).                                                                                                                       |
+| `--checkpoint_interval` | 5000 | Number of training steps between saving model checkpoints.                                                                                                  |
+| `--pretrain_steps` | 2286 | Number of generator pretraining steps.                                                                                                                      |
+| `--train_steps` | 457 | Number of adversarial training steps. Learning rate is halved at the floor half of this value.                                                              |
+| `--num_res_blocks` | 16 | Number of residual blocks in the generator network.                                                                                                         |
+| `--in_channels` | 3 | Number of input image channels.                                                                                                                             |
+---
+
+#### Inference Arguments
+
+| Argument | Default | Description |
+|---------|---------|-------------|
+| `--in_dir` | None | Path to directory containing LR images to be super-resolved. 
+---
+### Inference
+```
+python infer.py --in_dir data/Set14/image_SRF_4
+```
+Running the command produces x4 super-resolved images from LR images of Set14 using the SRGAN model trained, provided 
+that the test dataset and final
+SRGAN model exist. The SR images can be found in the `results` directory.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+---
+
+### Test
+```
+python test.py 
+```
+Evaluates the image quality of the Set14 SR images with PSNR and SSIM.
+For each SR-HR image pair, the PSNR (dB) and SSIM is printed out, along with the mean PSNR and SSIM over the entire dataset.
+
+Metrics are computed on the y-channel of center-cropped and 4-pixel border removal images
+
+---
 <!-- ROADMAP -->
 ## Roadmap
+- [ ] Add pretraining logging
 - [ ] Train a good SRGAN model
 - [ ] Add YAML
 - [ ] Merge test.py and infer.py
@@ -173,10 +255,11 @@ Output will be saved in `results/`.
 - [ ] Logging of test metrics (instead of just printing on terminal)
 - [ ] Automatic selection of final model based on best metric during training
 - [ ] Generalise functions
+- [ ] Clean up project
   
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
+---
 
 <!-- LICENSE -->
 ## License
@@ -185,11 +268,11 @@ This project is licensed under the MIT License. See [LICENSE](LICENSE) for more 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
+---
 
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
-Resources that are used or I have referenced in the development of this project.
+Resources that are used or referenced in the development of this project.
 * [Photo-Realistic Single Image Super-Resolution Using a Generative Adversarial Network](https://arxiv.org/abs/1609.04802)
 * [PyTorch-GAN GitHub Repo](https://github.com/eriklindernoren/PyTorch-GAN/tree/master)
 * [DIV2K Dataset](https://github.com/eriklindernoren/PyTorch-GAN/tree/master)

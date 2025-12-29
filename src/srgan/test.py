@@ -12,7 +12,6 @@ from PIL import Image
 from skimage.metrics import structural_similarity as skimage_ssim
 
 
-
 def compute_psnr (sr, hr, eps: float = 1e-10):
     sr_y = _rgb_to_y(sr)
     hr_y = _rgb_to_y(hr)

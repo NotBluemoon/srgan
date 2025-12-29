@@ -13,7 +13,7 @@ def parse_args():
     parser.add_argument("--b1", type=float, default=0.90, help="Adam: decay of first order momentum of gradient, defaulted to 0.90 to match SRGAN paper") # matches SRGAN paper
     parser.add_argument("--b2", type=float, default=0.999, help="Adam: decay of second order momentum of gradient")
     parser.add_argument("--channels", type=int, default=3, help="Number of image channels")
-    parser.add_argument("--checkpoint_interval", type=int, default=5000, help="Interval between model checkpoints")
+    parser.add_argument("--checkpoint_interval", type=int, default=250, help="Interval between model checkpoints")
     parser.add_argument("--pretrain_steps", type=int, default=2286, help="Target generator pretraining steps to achieve")
     parser.add_argument("--train_steps", type=int, default=457, help="Target training steps to achieve, learning rate will be switched at train_steps/2")
     parser.add_argument("--num_res_blocks", type=int, default=16, help="Number of residual blocks in SRGAN generator")
