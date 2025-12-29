@@ -11,12 +11,12 @@ import torch.nn.functional as F
 from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
-from srgan.helpers import load_srgan_checkpoint, init_log, delete_experiment_artifacts
-from srgan.pretrain import pretrain_generator
-from srgan.data.div2k import DIV2KDataset
-from srgan.models.discriminator import Discriminator
-from srgan.models.feature_extractor import FeatureExtractor
-from srgan.models.generator import Generator
+from src.srgan.helpers import load_srgan_checkpoint, init_log, delete_experiment_artifacts
+from src.srgan.pretrain import pretrain_generator
+from src.srgan.data.div2k import DIV2KDataset
+from src.srgan.models.discriminator import Discriminator
+from src.srgan.models.feature_extractor import FeatureExtractor
+from src.srgan.models.generator import Generator
 
 
 def train_srgan (opt):

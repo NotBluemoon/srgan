@@ -5,8 +5,8 @@ import torch
 import torch.nn.functional as F
 from torch.utils.data import DataLoader
 
-from srgan.helpers import load_ptg_checkpoint
-from srgan.data.div2k import DIV2KDataset
+from src.srgan.helpers import load_ptg_checkpoint
+from src.srgan.data.div2k import DIV2KDataset
 
 from tqdm.auto import tqdm
 

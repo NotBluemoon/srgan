@@ -49,10 +49,8 @@ My goal is to develop a clean PyTorch project that I can use as a reference in t
 ## About The Project
 
 ---
-This SRGAN is implemented according to the research paper with minimal changes. Since a lot of work has been done on improving
-SRGAN since its introduction, some architecture or parameter choices
-may not be the most optimal according to today's standard. The changes made in the implementation and explicit choices mentioned in the paper
-are described below.
+#### This SRGAN is implemented according to the research paper with minimal changes. Since a lot of work has been done on improving SRGAN since its introduction, some architecture or parameter choices may not be the most optimal according to today's standard. The changes made in the implementation and explicit choices mentioned in the paper are described below.
+
 ---
 ### Changed Parameters
 * ``Train dataset: ImageNet Random 350k subset (BRG) -> DIV2K 800 (RGB)``  
@@ -246,6 +244,7 @@ Metrics are computed on the y-channel of center-cropped and 4-pixel border remov
 ---
 <!-- ROADMAP -->
 ## Roadmap
+- [ ] Make torch requirements more robust (remove torch cuda)
 - [ ] Add pretraining logging
 - [ ] Train a good SRGAN model
 - [ ] Add YAML

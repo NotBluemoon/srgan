@@ -34,8 +34,8 @@ def infer (opt):
         with torch.no_grad():
             sr = generator(lr)
 
-        tqdm.write(f"lr min/max: {lr.min().item():.4f} {lr.max().item():.4f}")
-        tqdm.write(f"sr min/max: {sr.min().item():.4f} {sr.max().item():.4f}")
+        # tqdm.write(f"lr min/max: {lr.min().item():.4f} {lr.max().item():.4f}")
+        # tqdm.write(f"sr min/max: {sr.min().item():.4f} {sr.max().item():.4f}")
 
         # denormalize sr
         sr = sr.squeeze(0).detach().cpu()
