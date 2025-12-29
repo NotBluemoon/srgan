@@ -4,6 +4,7 @@ import torch
 def parse_args():
     parser = argparse.ArgumentParser()
 
+    # TODO separate arguments according to typing
     parser.add_argument("--resume",  action="store_true", help="Whether to use checkpoints/existing models or delete old models and start from scratch")
     parser.add_argument("--device", default="auto", choices=["auto","cpu","cuda"])
     parser.add_argument("--dataset_name", type=str, default="DIV2K", help="Name of the dataset")
@@ -13,8 +14,8 @@ def parse_args():
     parser.add_argument("--b2", type=float, default=0.999, help="Adam: decay of second order momentum of gradient")
     parser.add_argument("--channels", type=int, default=3, help="Number of image channels")
     parser.add_argument("--checkpoint_interval", type=int, default=5000, help="Interval between model checkpoints")
-    parser.add_argument("--pretrain_steps", type=int, default=200, help="Target generator pretraining steps to achieve")
-    parser.add_argument("--train_steps", type=int, default=2_000_000, help="Target training steps to achieve, learning rate will be switched at train_steps/2")
+    parser.add_argument("--pretrain_steps", type=int, default=2286, help="Target generator pretraining steps to achieve")
+    parser.add_argument("--train_steps", type=int, default=457, help="Target training steps to achieve, learning rate will be switched at train_steps/2")
     parser.add_argument("--num_res_blocks", type=int, default=16, help="Number of residual blocks in SRGAN generator")
     parser.add_argument("--in_channels", type=int, default=3, help="Number of input image channels")
 

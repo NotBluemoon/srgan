@@ -1,7 +1,7 @@
 <a id="readme-top"></a>
 
 # SRGAN – Super Resolution Generative Adversarial Network
-Implementation of SRGAN (Super Resolution GAN) faithful to the [2017 SRGAN paper by Ledig et al](https://arxiv.org/abs/1609.04802). 
+Implementation of SRGAN x4 (Super Resolution GAN) faithful to the [2017 SRGAN paper by Ledig et al](https://arxiv.org/abs/1609.04802). 
 My goal is to develop a clean PyTorch project that I can use as a reference in the future.
 
 ### Built With
@@ -35,6 +35,70 @@ My goal is to develop a clean PyTorch project that I can use as a reference in t
 
 
 
+<!-- ABOUT THE PROJECT -->
+## About The Project
+This SRGAN is implemented according to the research paper with minimal changes. Since a lot of work has been done on improving
+SRGAN since its introduction, some architecture or parameter choices
+may not be the most optimal according to today's standard. The changed choices, along with eplxicit choices mentioned in the paper
+are described below.
+
+### Changed 
+* ``Train dataset: ImageNet Random 350k subset (BRG) -> DIV2K 800 (RGB)``  
+    * Changed to accomodate project requirements, models are trained on RGB instead of BRG
+* ``Pretrain steps: 1_000_000 -> 2286``
+    * Scaled according to dataset size, not final as the model is not learning enough
+* ``Train steps: 200_000 -> 257``
+    * Same reasoning as above
+* ``Learning rate switch step: 100_000 -> 128``
+    * Same reasoning as above, uses floor division of train_steps / 2
+* ``Mean-opinion-score (MOS) test metric not used``
+    * No human participants involved
+
+### Unchanged
+#### Data
+* ``Scaling factor = 4``
+* ``Crop size: 96 x 96 for HR images, 24 x 24 for LR images``
+* ``Range of LR images: [0, 1], HR images: [-1, 1]``
+
+#### Model Architecture
+* ``Number of residual blocks B = 16``
+* ``Leaky ReLU α = 0.2``
+
+#### Training
+* ``Adam β1 = 0.9``
+* ``Pretrain learning rate = 0.0001``
+* ``Range of LR images: [0, 1], HR images: [-1, 1]``
+* ``Content loss: ``
+$$
+\mathcal{l}_{\text{VGG}/i,j}^{\text{SR}} =
+\frac{1}{12.75}
+\frac{1}{W_{i,j} H_{i,j}}
+\sum_{x=1}^{W_{i,j}} \sum_{y=1}^{H_{i,j}}
+\left(
+\phi_{i,j}(I^{HR})_{x,y}-
+\phi_{i,j}(G_{\theta_G}(I^{LR}))_{x,y}
+\right)^2
+$$
+    * Mean squared loss between the features of reconstructed and reference image, extracted with VGG54 derived from VGG19, then scaled with a factor of 1/12.75 to match pixel loss.
+* ``Adversarial loss:``
+$$
+\mathcal{l}_{\text{adv}} =
+\sum_{n=1}^{N}
+\left(-\log D_{\theta_D}(G_{\theta_G}(I_n^{LR}))
+\right)
+$$
+    * Achieved using binary cross entropy with target tensor set to 1 and reduction set to sum
+
+#### Test Metrics
+All metrics are calculated on the y-channel of center cropped, remove of a 4-pixel wide strip from each border (extracted from SRGAN paper)
+* ``Peak Signal-to-Noise Ratio (PSNR)``
+* ``Structure Similarity Index (SSIM)``
+
+### Results
+To be added as a satisfactory model has not been trained.
+
+
+
 <!-- GETTING STARTED -->
 ## Getting Started
 ### Project Structure
@@ -42,14 +106,12 @@ My goal is to develop a clean PyTorch project that I can use as a reference in t
 SRGAN/
 │
 ├── data/
-│   ├── HR/
-│   └── LR/
 │
-├── models/
-│   ├── generator.py
-│   ├── discriminator.py
-│   └── vgg.py
-│
+├── src/
+│   └── srgan/
+│       ├── data/
+│       ├── models/
+│   
 ├── train.py
 ├── test.py
 ├── utils.py
@@ -65,16 +127,18 @@ pip install -r requirements.txt
 ```
 
 ### Dataset
+#### Train Dataset
 For this implementation, the DIV2K bicubic subset with a
-scale factor `X4` is used to train the network and can be obtained here. The SRGAN paper downsamples HR images from the ImageNet database using bicubic kernel with downsampling factor `r = 4`.
+scale factor `X4` is used to train the network. The SRGAN paper downsamples HR images from the ImageNet database using bicubic kernel with downsampling factor `r = 4`.
 ```
 data/
 └── DIV2K/
     ├── DIV2K_train_HR
     ├── DIV2K_train_LR_bicubic
-    ├── DIV2K_valid_HR
-    └── DIV2K_valid_LR_bicubic
+
 ```
+#### Test Dataset
+Currently the implementation only supports using Set14 with a scale factor of 4 as test dataset, and it should be put in the data folder at project root
 
 ### Training
 ```

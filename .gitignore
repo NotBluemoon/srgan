@@ -13,11 +13,12 @@ dist/
 # Training outputs
 logs/
 models/
+!src/srgan/models
 results/
 
 # Ignore datasets
 data/
-!src/ctrlcv/data
+!src/srgan/data
 
 # Ignore output
 outputs/
