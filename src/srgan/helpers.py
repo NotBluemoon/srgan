@@ -15,10 +15,10 @@ def load_srgan_checkpoint (generator, discriminator, optimizer_G=None, optimizer
     if not os.path.exists(srgan_folder_path):
         return 0
 
-    checkpoints = list(srgan_folder_path.glob("srgan_step_*.pth"))
+    checkpoints = list(srgan_folder_path.glob("srgan_step*.pth"))
 
     def extract_step(path):
-        m = re.search(r"srgan_step_(\d+)\.pth", path.name)
+        m = re.search(r"srgan_step(\d+)\.pth", path.name)
         return int(m.group(1)) if m else -1
 
     checkpoint_path = max(checkpoints, key=extract_step)
@@ -38,7 +38,7 @@ def load_srgan_checkpoint (generator, discriminator, optimizer_G=None, optimizer
     return step
 
 
-def load_ptg_checkpoint (generator, optimizer, device="cuda"):
+def load_ptg_checkpoint (generator, optimizer, opt):
 
     project_root = Path(__file__).resolve().parents[2]
     ptg_folder_path = project_root / 'outputs' / 'generator_pretrained'
@@ -46,14 +46,15 @@ def load_ptg_checkpoint (generator, optimizer, device="cuda"):
     if not os.path.exists(ptg_folder_path):
         return 0
 
-    checkpoints = list(ptg_folder_path.glob("ptg_step_*.pth"))
+    checkpoints = list(ptg_folder_path.glob("ptg_*.pth"))
 
     def extract_step(path):
-        m = re.search(r"ptg_step_(\d+)\.pth", path.name)
+        m = re.search(r"ptg_(\d+)\.pth", path.name)
         return int(m.group(1)) if m else -1
 
     checkpoint_path = max(checkpoints, key=extract_step)
-    checkpoint = torch.load(checkpoint_path, map_location=device)
+    print(checkpoint_path)
+    checkpoint = torch.load(checkpoint_path, map_location=opt.device)
 
     generator.load_state_dict(checkpoint["generator_state_dict"])
 
@@ -92,6 +93,9 @@ def delete_experiment_artifacts ():
     path_outputs =  project_root / 'outputs'
     path_models = project_root / 'models'
 
-    if os.path.exists(path_outputs) or os.path.exists(path_models):
+    if os.path.exists(path_outputs):
         shutil.rmtree(path_outputs)
+
+    if os.path.exists(path_models):
         shutil.rmtree(path_models)
+

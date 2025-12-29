@@ -37,7 +37,6 @@ def train_srgan (opt):
     criterion_content = torch.nn.MSELoss()
     criterion_discriminator = torch.nn.BCELoss()
 
-    # Load dataset
     train_data = DIV2KDataset(training=True)
 
     train_loader = DataLoader(
@@ -46,40 +45,41 @@ def train_srgan (opt):
         shuffle=True
     )
 
-    # Load pretrained generator
+    # Check if pretrained generator exists
     if os.path.exists(pretrained_gen_path):
         checkpoint = torch.load(pretrained_gen_path, map_location=opt.device)
         generator.load_state_dict(checkpoint['model'])
+        print('Loading pretrained generator...')
     else:
         print('Pretraining generator...')
         pretrain_generator(opt, generator)
 
     target_step = opt.train_steps
-    switch_step = target_step/2
+    switch_step = target_step//2
     current_step = 0
 
     optimizer_G = torch.optim.Adam(generator.parameters(), lr=0.0001, betas=(opt.b1, opt.b2))
     optimizer_D = torch.optim.Adam(discriminator.parameters(), lr=0.0001, betas=(opt.b1, opt.b2))
 
-    # Check if final SRGAN exists, if not then check for SRGAN checkpoint
+    # Check if final SRGAN exists, if not then check for checkpoints
     final_srgan_path = project_root / 'models' / 'srgan.pth'
     if os.path.exists(final_srgan_path):
         print("SRGAN already trained")
         return 0
 
-    # If not then check for SRGAN checkpoint then load it
     checkpoint_srgan_path = project_root / 'outputs' / 'srgan'
     os.makedirs(checkpoint_srgan_path, exist_ok=True)
     if any(checkpoint_srgan_path.iterdir()):
         print("Loading SRGAN from checkpoint...")
         current_step = load_srgan_checkpoint(generator, discriminator, optimizer_G, optimizer_D) # update current step
+    else:
+        print("Training SRGAN from scratch...")
 
     generator.train()
     discriminator.train()
 
     pbar = tqdm(total=opt.train_steps - current_step, initial=0, desc="Training SRGAN", unit="step")
 
-    # Training loop for SRGAN
     while current_step < target_step:
         for lr, hr in train_loader:
             lr = lr.to(opt.device, non_blocking=True)
@@ -88,7 +88,7 @@ def train_srgan (opt):
             if current_step == switch_step:
                 for pg in optimizer_G.param_groups: pg["lr"] = 1e-5
                 for pg in optimizer_D.param_groups: pg["lr"] = 1e-5
-                print('Learning rate switched from 10^-4 to 10^-5')
+                tqdm.write('Learning rate switched from 10^-4 to 10^-5')
 
             # ------------------------------------
             # Train generator with perceptual loss
@@ -102,10 +102,11 @@ def train_srgan (opt):
             gen_features = feature_extractor(gen_hr)
             real_features = feature_extractor(hr)
             content_loss = criterion_content(gen_features, real_features.detach())
-            content_loss = content_loss * 0.006 # Rescaled with a factor of 0.006 with reference to the SRGAN paper
+            content_loss = content_loss * 0.006 # Scaled according to SRGAN paper
 
             # Adversarial loss
-            adversarial_loss = F.binary_cross_entropy(discriminator(gen_hr), torch.ones_like(discriminator(gen_hr)), reduction='sum')
+            pred_gen = discriminator(gen_hr)
+            adversarial_loss = F.binary_cross_entropy(pred_gen, torch.ones_like(pred_gen), reduction='sum')
 
             # Perceptual loss
             loss_G = content_loss + 1e-3 * adversarial_loss
@@ -133,20 +134,19 @@ def train_srgan (opt):
 
             current_step += 1
             pbar.update(1)
-            pbar.set_postfix(loss_G=float(loss_G), loss_D=float(loss_D))
+            pbar.set_postfix(loss_G=float(loss_G.detach()), loss_D=float(loss_D.detach()))
 
             # -------------------
             # Periodic checkpoint
             # -------------------
             if current_step % opt.checkpoint_interval == 0:
 
-                tqdm.write(f"[GAN] step {current_step}/{target_step} | "
+                tqdm.write(f"[SRGAN] step {current_step}/{target_step} | "
                       f"loss_D={loss_D.item():.4f} "
                       f"content_loss={content_loss.item():.4f} "
                       f"adversarial_loss={adversarial_loss.item():.4f} "
                       f"loss_G={loss_G.item():.4f}")
 
-                # save to spreadsheet
                 ws.append([
                     int(current_step),
                     float(loss_D.item()),
@@ -173,8 +173,9 @@ def train_srgan (opt):
             if current_step >= target_step:
                 break
 
-    # Finished training model
-    os.makedirs(project_root / 'models' / 'srgan', exist_ok=True)
+    pbar.close()
+
+    os.makedirs(project_root / 'models', exist_ok=True)
     torch.save(generator.state_dict(), "models/srgan.pth")
     print('SRGAN training finished.')
 

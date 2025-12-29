@@ -1,7 +1,7 @@
 import argparse
 import torch
 
-def parse_train_args():
+def parse_args():
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--resume",  action="store_true", help="Whether to use checkpoints/existing models or delete old models and start from scratch")
@@ -17,6 +17,9 @@ def parse_train_args():
     parser.add_argument("--train_steps", type=int, default=2_000_000, help="Target training steps to achieve, learning rate will be switched at train_steps/2")
     parser.add_argument("--num_res_blocks", type=int, default=16, help="Number of residual blocks in SRGAN generator")
     parser.add_argument("--in_channels", type=int, default=3, help="Number of input image channels")
+
+    # infer arguments
+    parser.add_argument("--in_dir", type=str, default=None, help="Path to input directory that contains images that need to be super-resolved")
 
     opt = parser.parse_args()
 

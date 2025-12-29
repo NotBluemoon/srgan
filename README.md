@@ -81,7 +81,15 @@ data/
 python train.py --device auto --batch_size 16 --lr 0.0001 --b1 0.90 --b2 0.999 --checkpoint_interval 5000 --pretrain_steps 100_000 --train_steps 200_000 --num_res_blocks 16
 ```
 Running `python train.py` will use the default parameters which are the ones used in the SRGAN paper.
-Feel free to change the training parameters according to your current needs.
+The only parameter changed from the paper is the pretraining steps and training steps since a different dataset is used.
+
+Note that the `--resume` should only be used if `pretrain_steps` and `train_steps` are unchanged. It should only
+be used in case the training was interrupted and no other parameters are changed.
+
+For both `pretrain_steps` and `train_steps`, the value is scaled according 800/350000 to the dataset size used, in which the paper used 350k images
+from ImageNet and this implementation uses only 800 images from DIV2K.
+
+
 
 ### Inference
 ```
@@ -94,13 +102,13 @@ Output will be saved in `results/`.
 
 <!-- ROADMAP -->
 ## Roadmap
+- [ ] Train a good SRGAN model
 - [ ] Add YAML
-- [ ] Add back to top links
-- [ ] Add Additional Templates w/ Examples
-- [ ] Add "components" document to easily copy & paste sections of the readme
-- [ ] Multi-language Support
-    - [ ] Chinese
-    - [ ] Spanish
+- [ ] Merge test.py and infer.py
+- [ ] Better logging of metrics during training
+- [ ] Logging of test metrics (instead of just printing on terminal)
+- [ ] Automatic selection of final model based on best metric during training
+- [ ] Generalise functions
   
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

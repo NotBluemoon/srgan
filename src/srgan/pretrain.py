@@ -34,9 +34,8 @@ def pretrain_generator (opt, generator):
     os.makedirs(checkpoint_ptg_dir, exist_ok=True)
 
     if any(checkpoint_ptg_dir.iterdir()):
-        print("Loading pretrained generator from checkpoint...")
-        current_step = load_ptg_checkpoint(generator, optimizer, checkpoint_ptg_dir)
-        print(current_step)
+        current_step = load_ptg_checkpoint(generator, optimizer, opt)
+        print(f"Loading pretrained generator from checkpoint {current_step}")
     else:
         print("Pretraining generator from scratch...")
 

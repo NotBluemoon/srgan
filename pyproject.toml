@@ -1,4 +1,4 @@
 [project]
 name = "srgan"
-version = "1.0.0"
-description = "Technical test for srgan role"
+version = "0.7.0"
+description = "Technical test for ctrlcv role"
