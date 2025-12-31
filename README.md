@@ -120,27 +120,13 @@ All metrics are calculated on the y-channel of center cropped, remove of a 4-pix
 ---
 
 ### Results
-<figure style="text-align:center">
 
-  <div style="display:flex; justify-content:space-around;">
-    <div>
-      <img src="assets/HR.png" width="250"/><br/>
-      (a) Original HR Image
-    </div>
-    <div>
-      <img src="assets/og_SRGAN.png" width="250"/><br/>
-      (b) SRGAN SR Image from paper
-    </div>
-    <div>
-      <img src="assets/div2k_SRGAN.png" width="250"/><br/>
-      (c) DIV2K-trained SRGAN SR Image
-    </div>
-  </div>
+---
 
-  <figcaption>
-    <b>Figure 1:</b>.
-  </figcaption>
-</figure>
+| (a) Original HR | (b) SRGAN (Paper) | (c) SRGAN (DIV2K) |
+|:---------------:|:-----------------:|:-----------------:|
+| <img src="assets/HR.png" width="250"/> | <img src="assets/og_SRGAN.png" width="250"/> | <img src="assets/div2k_SRGAN.png" width="250"/> |
+
 
 The difference in image quality of the SRGAN used in this implementation is attributed to the number of training steps. 
 The SRGAN model used is only trained on 25000 pretraining steps and 5000 training steps. 
