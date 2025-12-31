@@ -16,6 +16,7 @@ def parse_args():
     parser.add_argument("--checkpoint_interval", type=int, default=250, help="Interval between model checkpoints")
     parser.add_argument("--pretrain_steps", type=int, default=2286, help="Target generator pretraining steps to achieve")
     parser.add_argument("--train_steps", type=int, default=457, help="Target training steps to achieve, learning rate will be switched at train_steps/2")
+    parser.add_argument("--switch_step", type=int, default=225, help="Step to switch the learning rate")
     parser.add_argument("--num_res_blocks", type=int, default=16, help="Number of residual blocks in SRGAN generator")
     parser.add_argument("--in_channels", type=int, default=3, help="Number of input image channels")
 

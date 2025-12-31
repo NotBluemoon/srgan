@@ -32,18 +32,18 @@ def infer (opt):
         lr = F.to_tensor(img).unsqueeze(0).to(device) # [0, 1]
 
         with torch.no_grad():
-            sr = generator(lr)
+            sr = generator(lr) # [-1, 1]
 
-        # tqdm.write(f"lr min/max: {lr.min().item():.4f} {lr.max().item():.4f}")
-        # tqdm.write(f"sr min/max: {sr.min().item():.4f} {sr.max().item():.4f}")
+        tqdm.write(f"lr min/max: {lr.min().item():.4f} {lr.max().item():.4f}")
+        tqdm.write(f"sr min/max: {sr.min().item():.4f} {sr.max().item():.4f}")
 
-        # denormalize sr
+        # denormalize sr for saving
         sr = sr.squeeze(0).detach().cpu()
         sr = sr * 0.5 + 0.5
         sr = sr.clamp(0,1)
 
         save_name = img_path.name.replace("LR.png", "SR.png")
         save_path = out_dir / save_name
-        T.ToPILImage()(sr).save(save_path)
+        T.ToPILImage('RGB')(sr).save(save_path)
 
 

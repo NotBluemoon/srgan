@@ -120,7 +120,32 @@ All metrics are calculated on the y-channel of center cropped, remove of a 4-pix
 ---
 
 ### Results
-To be added, as a satisfactory model has not been trained.
+<figure style="text-align:center">
+
+  <div style="display:flex; justify-content:space-around;">
+    <div>
+      <img src="assets/HR.png" width="250"/><br/>
+      (a) Original HR Image
+    </div>
+    <div>
+      <img src="assets/og_SRGAN.png" width="250"/><br/>
+      (b) SRGAN SR Image from paper
+    </div>
+    <div>
+      <img src="assets/div2k_SRGAN.png" width="250"/><br/>
+      (c) DIV2K-trained SRGAN SR Image
+    </div>
+  </div>
+
+  <figcaption>
+    <b>Figure 1:</b>.
+  </figcaption>
+</figure>
+
+The difference in image quality of the SRGAN used in this implementation is attributed to the number of training steps. 
+The SRGAN model used is only trained on 25000 pretraining steps and 5000 training steps. 
+
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -245,8 +270,8 @@ Metrics are computed on the y-channel of center-cropped and 4-pixel border remov
 <!-- ROADMAP -->
 ## Roadmap
 - [ ] Make torch requirements more robust (remove torch cuda)
-- [ ] Add pretraining logging
-- [ ] Train a good SRGAN model
+- [x] Add pretraining logging
+- [x] Train a good SRGAN model
 - [ ] Add YAML
 - [ ] Merge test.py and infer.py
 - [ ] Better logging of metrics during training

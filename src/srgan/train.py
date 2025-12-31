@@ -11,12 +11,13 @@ import torch.nn.functional as F
 from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
-from src.srgan.helpers import load_srgan_checkpoint, init_log, delete_experiment_artifacts
-from src.srgan.pretrain import pretrain_generator
 from src.srgan.data.div2k import DIV2KDataset
+from src.srgan.helpers import load_srgan_checkpoint, delete_experiment_artifacts
+from src.srgan.loggers.train_logger import TrainLogger
 from src.srgan.models.discriminator import Discriminator
 from src.srgan.models.feature_extractor import FeatureExtractor
 from src.srgan.models.generator import Generator
+from src.srgan.pretrain import pretrain_generator
 
 
 def train_srgan (opt):
@@ -28,11 +29,12 @@ def train_srgan (opt):
     project_root = Path(__file__).resolve().parents[2]
     pretrained_gen_path = project_root/'outputs'/'generator_pretrained.pth'
 
-    wb, ws, log_path = init_log ()
+    # wb, ws, log_path = init_log ()
 
     generator = Generator(opt).to(opt.device)
     discriminator = Discriminator().to(opt.device)
     feature_extractor = FeatureExtractor().to(opt.device).eval()
+    train_logger = TrainLogger(opt)
 
     criterion_content = torch.nn.MSELoss()
     criterion_discriminator = torch.nn.BCELoss()
@@ -55,7 +57,7 @@ def train_srgan (opt):
         pretrain_generator(opt, generator)
 
     target_step = opt.train_steps
-    switch_step = target_step//2
+    switch_step = opt.switch_step
     current_step = 0
 
     optimizer_G = torch.optim.Adam(generator.parameters(), lr=0.0001, betas=(opt.b1, opt.b2))
@@ -147,15 +149,17 @@ def train_srgan (opt):
                       f"adversarial_loss={adversarial_loss.item():.4f} "
                       f"loss_G={loss_G.item():.4f}")
 
-                ws.append([
-                    int(current_step),
-                    float(loss_D.item()),
-                    float(content_loss.item()),
-                    float(adversarial_loss.item()),
-                    float(loss_G.item()),
-                ])
+                # ws.append([
+                #     int(current_step),
+                #     float(loss_D.item()),
+                #     float(content_loss.item()),
+                #     float(adversarial_loss.item()),
+                #     float(loss_G.item()),
+                # ])
+                #
+                # wb.save(log_path)
 
-                wb.save(log_path)
+                train_logger.update(opt, current_step, loss_D.item(), content_loss.item(), adversarial_loss.item(), loss_G.item())
 
                 experiment_srgan_dir = project_root / 'outputs' / 'srgan'
                 os.makedirs(experiment_srgan_dir, exist_ok=True)

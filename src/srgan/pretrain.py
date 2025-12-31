@@ -9,13 +9,14 @@ from src.srgan.helpers import load_ptg_checkpoint
 from src.srgan.data.div2k import DIV2KDataset
 
 from tqdm.auto import tqdm
+from src.srgan.loggers.pretrain_logger import PretrainLogger
 
 
 def pretrain_generator (opt, generator):
 
+    pretrain_logger = PretrainLogger(opt)
     project_root = Path(__file__).resolve().parents[2]
 
-    # Load dataset
     train_data = DIV2KDataset(training=True)
 
     train_loader = DataLoader(
@@ -64,6 +65,8 @@ def pretrain_generator (opt, generator):
             current_step += 1
             pbar.update(1)
             pbar.set_postfix(loss=float(loss.detach()))
+
+            pretrain_logger.update(opt, current_step, loss.item())
 
             if current_step % opt.checkpoint_interval == 0:
                 torch.save({
