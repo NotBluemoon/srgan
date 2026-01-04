@@ -125,7 +125,7 @@ All metrics are calculated on the y-channel of center cropped, remove of a 4-pix
 
 | (a) Original HR | (b) SRGAN (Paper) | (c) SRGAN (DIV2K) |
 |:---------------:|:-----------------:|:-----------------:|
-| <img src="assets/HR.png" width="250"/> | <img src="assets/og_SRGAN.png" width="250"/> | <img src="assets/div2k_SRGAN.png" width="250"/> |
+| <img src="assets/HR.png" style="max-width:100%; height:auto;"/> | <img src="assets/og_SRGAN.png" style="max-width:100%; height:auto;"/> | <img src="assets/div2k_SRGAN.png" style="max-width:100%; height:auto;"/> |
 
 
 The difference in image quality of the SRGAN used in this implementation is attributed to the number of training steps. 
@@ -291,6 +291,32 @@ Resources that are used or referenced in the development of this project.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
+## Supplementary Materials
+### SRResNet Performance at Different Training Steps
+|                    Original HR                     |                     2500 steps                     |                     5000 steps                     |
+|:--------------------------------------------------:|:--------------------------------------------------:|:--------------------------------------------------:|
+|       <img src="assets/HR.png" style="max-width:100%; height:auto;"/>       | <img src="assets/srresnet/2500.png" style="max-width:100%; height:auto;"/>  | <img src="assets/srresnet/5000.png" style="max-width:100%; height:auto;"/>  |
+|                     7500 steps                     |                    10000 steps                     |                    12500 steps                     |
+| <img src="assets/srresnet/7500.png" style="max-width:100%; height:auto;"/>  | <img src="assets/srresnet/10000.png" style="max-width:100%; height:auto;"/> | <img src="assets/srresnet/12500.png" style="max-width:100%; height:auto;"/> |
+|                    15000 steps                     |                    17500 steps                     |                    20000 steps                     |
+| <img src="assets/srresnet/15000.png" style="max-width:100%; height:auto;"/> | <img src="assets/srresnet/17500.png" style="max-width:100%; height:auto;"/> | <img src="assets/srresnet/20000.png" style="max-width:100%; height:auto;"/> |
+
+|                    22500 steps                     |                    25000 steps                     |
+|:--------------------------------------------------:|:--------------------------------------------------:|
+| <img src="assets/srresnet/22500.png" style="max-width:100%; height:auto;"/> | <img src="assets/srresnet/25000.png" style="max-width:100%; height:auto;"/> |
+
+### SRGAN Performance at Different Training Steps before learning rate switch
+|                  Original HR                   |                   1000 steps                   |                   2000 steps                   |
+|:----------------------------------------------:|:----------------------------------------------:|:----------------------------------------------:|
+|     <img src="assets/HR.png" style="max-width:100%; height:auto;"/>     | <img src="assets/srgan/1000.png" style="max-width:100%; height:auto;"/> | <img src="assets/srgan/2000.png" style="max-width:100%; height:auto;"/> |
+|                   3000 steps                   |                   4000 steps                   |                   5000 steps                   |
+| <img src="assets/srgan/3000.png" style="max-width:100%; height:auto;"/> | <img src="assets/srgan/4000.png" style="max-width:100%; height:auto;"/> | <img src="assets/srgan/5000.png" style="max-width:100%; height:auto;"/> |
+|                   6000 steps                   |                   7000 steps                   |                   8000 steps                   |
+| <img src="assets/srgan/6000.png" style="max-width:100%; height:auto;"/> | <img src="assets/srgan/7000.png" style="max-width:100%; height:auto;"/> | <img src="assets/srgan/8000.png" style="max-width:100%; height:auto;"/> |
+
+|                   9000 steps                   |                   10000 steps                   |
+|:----------------------------------------------:|:-----------------------------------------------:|
+| <img src="assets/srgan/9000.png" style="max-width:100%; height:auto;"/> | <img src="assets/srgan/10000.png" style="max-width:100%; height:auto;"/> |
 
 <!-- MARKDOWN LINKS & IMAGES -->
 [python-shield]: https://img.shields.io/badge/Language-Python-3776AB?logo=python&logoColor=white
