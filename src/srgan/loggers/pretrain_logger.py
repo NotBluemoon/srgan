@@ -1,8 +1,8 @@
 from collections import deque
 import math, csv, os
 from pathlib import Path
-import matplotlib
-import matplotlib.pyplot as plt
+# import matplotlib
+# import matplotlib.pyplot as plt
 
 
 class PretrainLogger:

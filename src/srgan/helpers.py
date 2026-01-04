@@ -7,8 +7,16 @@ from pathlib import Path
 from openpyxl import Workbook, load_workbook
 
 
-def load_srgan_checkpoint (generator, discriminator, optimizer_G=None, optimizer_D=None, device="cuda"):
+def load_infer_model(generator, path, device, key: str | None):
+    if not path.exists():
+        raise FileNotFoundError(f"Model does not exist.")
 
+    ckpt = torch.load(path, map_location=device)
+    state_dict = ckpt if key is None else ckpt[key]
+    generator.load_state_dict(state_dict)
+
+
+def load_srgan_checkpoint(generator, discriminator, optimizer_G=None, optimizer_D=None, device="cuda"):
     project_root = Path(__file__).resolve().parents[2]
     srgan_folder_path = project_root / 'outputs' / 'srgan'
 
@@ -38,8 +46,7 @@ def load_srgan_checkpoint (generator, discriminator, optimizer_G=None, optimizer
     return step
 
 
-def load_ptg_checkpoint (generator, optimizer, opt):
-
+def load_ptg_checkpoint(generator, optimizer, opt):
     project_root = Path(__file__).resolve().parents[2]
     ptg_folder_path = project_root / 'outputs' / 'generator_pretrained'
 
@@ -66,10 +73,11 @@ def load_ptg_checkpoint (generator, optimizer, opt):
 
     return step
 
-def init_log ():
+
+def init_log():
     log_path = Path("outputs/logs/srgan_metrics.xlsx")
     log_path.parent.mkdir(parents=True, exist_ok=True)
-    
+
     if log_path.exists():
         wb = load_workbook(log_path)
         ws = wb.active
@@ -87,10 +95,11 @@ def init_log ():
 
     return wb, ws, log_path
 
-def delete_experiment_artifacts ():
+
+def delete_experiment_artifacts():
     project_root = Path(__file__).resolve().parents[2]
 
-    path_outputs =  project_root / 'outputs'
+    path_outputs = project_root / 'outputs'
     path_models = project_root / 'models'
 
     if os.path.exists(path_outputs):
@@ -98,4 +107,3 @@ def delete_experiment_artifacts ():
 
     if os.path.exists(path_models):
         shutil.rmtree(path_models)
-

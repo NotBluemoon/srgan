@@ -90,7 +90,7 @@ def train_srgan (opt):
             if current_step == switch_step:
                 for pg in optimizer_G.param_groups: pg["lr"] = 1e-5
                 for pg in optimizer_D.param_groups: pg["lr"] = 1e-5
-                tqdm.write('Learning rate switched from 10^-4 to 10^-5')
+                tqdm.write(f'Learning rate switched from 10^-4 to 10^-5 at step {current_step}')
 
             # ------------------------------------
             # Train generator with perceptual loss

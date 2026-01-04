@@ -233,7 +233,7 @@ SRGAN model will be saved in the `models` directory.
 ---
 ### Inference
 ```
-python infer.py --in_dir data/Set14/image_SRF_4
+python infer.py --infer_model srgan --infer_step final
 ```
 Running the command produces x4 super-resolved images from LR images of Set14 using the SRGAN model trained, provided 
 that the test dataset and final
@@ -255,12 +255,12 @@ Metrics are computed on the y-channel of center-cropped and 4-pixel border remov
 ---
 <!-- ROADMAP -->
 ## Roadmap
-- [ ] Make torch requirements more robust (remove torch cuda)
+- [X] Make torch requirements more robust (remove torch cuda)
 - [x] Add pretraining logging
 - [x] Train a good SRGAN model
 - [ ] Add YAML
 - [ ] Merge test.py and infer.py
-- [ ] Better logging of metrics during training
+- [X] Better logging of metrics during training
 - [ ] Logging of test metrics (instead of just printing on terminal)
 - [ ] Automatic selection of final model based on best metric during training
 - [ ] Generalise functions
