@@ -67,17 +67,13 @@ def centre_crop (sr, hr):
     return crop(sr), crop(hr)
 
 
-def test_srgan ():
+def test_srgan (opt):
 
     project_root = Path(__file__).resolve().parents[2]
-    srgan_path = project_root / 'models' / 'srgan.pth'
 
     # TODO change this to be more flexible
     hr_dir = project_root / 'data' / 'Set14' / 'image_SRF_4'
-    sr_dir = project_root / 'results' / 'Set14' / 'image_SRF_4'
-
-    if not srgan_path.exists():
-        raise FileNotFoundError(f"SRGAN model does not exist at: {srgan_path}")
+    sr_dir = Path(opt.test_dir)
 
     psnr_array = []
     ssim_array = []
@@ -109,7 +105,7 @@ def test_srgan ():
 
             log += f"{sr_img_name} | PSNR: {psnr:.2f} dB | SSIM: {ssim:.4f}\n"
 
-    print(log)
+    # print(log)
 
     if psnr_array:
         avg_psnr = sum(psnr_array) / len(psnr_array)

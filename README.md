@@ -225,12 +225,7 @@ SRGAN model will be saved in the `models` directory.
 | `--in_channels` | 3 | Number of input image channels.                                                                                                                             |
 ---
 
-#### Inference Arguments
 
-| Argument | Default | Description |
-|---------|---------|-------------|
-| `--in_dir` | None | Path to directory containing LR images to be super-resolved. 
----
 ### Inference
 ```
 python infer.py --infer_model srgan --infer_step final
@@ -238,6 +233,13 @@ python infer.py --infer_model srgan --infer_step final
 Running the command produces x4 super-resolved images from LR images of Set14 using the SRGAN model trained, provided 
 that the test dataset and final
 SRGAN model exist. The SR images can be found in the `results` directory.
+
+#### Inference Arguments
+
+| Argument        | Default | Description |
+|-----------------|---------|-------------|
+| `--infer_model` | None | Path to directory containing LR images to be super-resolved. 
+---
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -250,7 +252,7 @@ python test.py
 Evaluates the image quality of the Set14 SR images with PSNR and SSIM.
 For each SR-HR image pair, the PSNR (dB) and SSIM is printed out, along with the mean PSNR and SSIM over the entire dataset.
 
-Metrics are computed on the y-channel of center-cropped and 4-pixel border removal images
+Metrics are computed on the y-channel of centre-cropped and 4-pixel border removal images
 
 ---
 <!-- ROADMAP -->
@@ -262,7 +264,6 @@ Metrics are computed on the y-channel of center-cropped and 4-pixel border remov
 - [ ] Merge test.py and infer.py
 - [X] Better logging of metrics during training
 - [ ] Logging of test metrics (instead of just printing on terminal)
-- [ ] Automatic selection of final model based on best metric during training
 - [ ] Generalise functions
 - [ ] Clean up project
   
@@ -290,9 +291,14 @@ Resources that are used or referenced in the development of this project.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+---
 
 ## Supplementary Materials
-### SRResNet Performance at Different Training Steps
+
+---
+<details>
+<summary><strong>SRResNet Performance at Different Training Steps, intervals of 2500</strong></summary>
+
 |                    Original HR                     |                     2500 steps                     |                     5000 steps                     |
 |:--------------------------------------------------:|:--------------------------------------------------:|:--------------------------------------------------:|
 |       <img src="assets/HR.png" style="max-width:100%; height:auto;"/>       | <img src="assets/srresnet/2500.png" style="max-width:100%; height:auto;"/>  | <img src="assets/srresnet/5000.png" style="max-width:100%; height:auto;"/>  |
@@ -301,24 +307,65 @@ Resources that are used or referenced in the development of this project.
 |                    15000 steps                     |                    17500 steps                     |                    20000 steps                     |
 | <img src="assets/srresnet/15000.png" style="max-width:100%; height:auto;"/> | <img src="assets/srresnet/17500.png" style="max-width:100%; height:auto;"/> | <img src="assets/srresnet/20000.png" style="max-width:100%; height:auto;"/> |
 
-|                    22500 steps                     |                    25000 steps                     |
-|:--------------------------------------------------:|:--------------------------------------------------:|
+|                    22500 steps                     |                                **25000 steps**<sup>*</sup>                                |
+|:--------------------------------------------------:|:---------------------------------------------------------------------------:|
 | <img src="assets/srresnet/22500.png" style="max-width:100%; height:auto;"/> | <img src="assets/srresnet/25000.png" style="max-width:100%; height:auto;"/> |
 
-### SRGAN Performance at Different Training Steps before learning rate switch
-|                  Original HR                   |                   1000 steps                   |                   2000 steps                   |
-|:----------------------------------------------:|:----------------------------------------------:|:----------------------------------------------:|
+</details>
+
+---
+
+<details>
+<summary><strong>SRGAN Performance at Different Training Steps before learning rate switch, intervals of 1000</strong></summary>
+
+|                               Original HR                               |                   1000 steps                   |                   2000 steps                   |
+|:-----------------------------------------------------------------------:|:----------------------------------------------:|:----------------------------------------------:|
 |     <img src="assets/HR.png" style="max-width:100%; height:auto;"/>     | <img src="assets/srgan/1000.png" style="max-width:100%; height:auto;"/> | <img src="assets/srgan/2000.png" style="max-width:100%; height:auto;"/> |
-|                   3000 steps                   |                   4000 steps                   |                   5000 steps                   |
+|                       **3000 steps**<sup>*</sup>                        |                   4000 steps                   |                   5000 steps                   |
 | <img src="assets/srgan/3000.png" style="max-width:100%; height:auto;"/> | <img src="assets/srgan/4000.png" style="max-width:100%; height:auto;"/> | <img src="assets/srgan/5000.png" style="max-width:100%; height:auto;"/> |
-|                   6000 steps                   |                   7000 steps                   |                   8000 steps                   |
+|                               6000 steps                                |                   7000 steps                   |                   8000 steps                   |
 | <img src="assets/srgan/6000.png" style="max-width:100%; height:auto;"/> | <img src="assets/srgan/7000.png" style="max-width:100%; height:auto;"/> | <img src="assets/srgan/8000.png" style="max-width:100%; height:auto;"/> |
 
-|                   9000 steps                   |                   10000 steps                   |
-|:----------------------------------------------:|:-----------------------------------------------:|
+|                       9000 steps                                        |                   10000 steps                   |
+|:-----------------------------------------------------------------------:|:-----------------------------------------------:|
 | <img src="assets/srgan/9000.png" style="max-width:100%; height:auto;"/> | <img src="assets/srgan/10000.png" style="max-width:100%; height:auto;"/> |
 
-<!-- MARKDOWN LINKS & IMAGES -->
+</details>
+
+---
+
+<details>
+
+<summary><strong>SRGAN Performance at Different Training Steps after learning rate switch at step 3001, in intervals of 1000 </strong></summary>
+
+|                                  Original HR                                  |                                  4000 steps                                   |                                  5000 steps                                   |
+|:-----------------------------------------------------------------------------:|:-----------------------------------------------------------------------------:|:-----------------------------------------------------------------------------:|
+|        <img src="assets/HR.png" style="max-width:100%; height:auto;"/>        | <img src="assets/srgan_after/4000.png" style="max-width:100%; height:auto;"/> | <img src="assets/srgan_after/5000.png" style="max-width:100%; height:auto;"/> |
+|                                  6000 steps                                   |                                  7000 steps                                   |                                  8000 steps                                   |
+| <img src="assets/srgan_after/6000.png" style="max-width:100%; height:auto;"/> | <img src="assets/srgan_after/7000.png" style="max-width:100%; height:auto;"/> | <img src="assets/srgan_after/8000.png" style="max-width:100%; height:auto;"/> |
+
+</details>
+
+---
+
+<details>
+<summary><strong>SRGAN Performance at Different Training Steps after learning rate switch at step 3001, between step 5000 and 6000, in intervals of 100</strong></summary>
+|                                    Original HR                                    |                                    5000 steps                                     |                                    5100 steps                                     |
+|:---------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------:|
+|          <img src="assets/HR.png" style="max-width:100%; height:auto;"/>          | <img src="assets/srgan_after_100/5000.png" style="max-width:100%; height:auto;"/> | <img src="assets/srgan_after_100/5100.png" style="max-width:100%; height:auto;"/> |
+|                                    5200 steps                                     |                                    5300 steps                                     |                                    5400 steps                                     |
+| <img src="assets/srgan_after_100/5200.png" style="max-width:100%; height:auto;"/> | <img src="assets/srgan_after_100/5300.png" style="max-width:100%; height:auto;"/> | <img src="assets/srgan_after_100/5400.png" style="max-width:100%; height:auto;"/> |
+|                                    5500 steps                                     |                                    5600 steps                                     |                                    5700 steps                                     |
+| <img src="assets/srgan_after_100/5500.png" style="max-width:100%; height:auto;"/> | <img src="assets/srgan_after_100/5600.png" style="max-width:100%; height:auto;"/> | <img src="assets/srgan_after_100/5700.png" style="max-width:100%; height:auto;"/> |
+|                                    5800 steps                                     |                                    5900 steps                                     |                                    6000 steps                                     |
+| <img src="assets/srgan_after_100/5800.png" style="max-width:100%; height:auto;"/> | <img src="assets/srgan_after_100/5900.png" style="max-width:100%; height:auto;"/> | <img src="assets/srgan_after_100/6000.png" style="max-width:100%; height:auto;"/> |
+
+</details>
+
+
+
+
+
 [python-shield]: https://img.shields.io/badge/Language-Python-3776AB?logo=python&logoColor=white
 [python-url]: https://www.python.org/
 [pytorch-shield]: https://img.shields.io/badge/Framework-PyTorch-ee4c2c?logo=pytorch&logoColor=white

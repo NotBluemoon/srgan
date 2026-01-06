@@ -24,6 +24,8 @@ def parse_args():
     parser.add_argument("--infer_model", type=str, default="srgan", help="Choose either 'SRGAN' or 'SRResNet'.") # srgan, srresnet
     parser.add_argument("--infer_step", type=str, default='final', help="Determines which model to use based on the step, use 'final' for final trained model")
 
+    # test arguments
+    parser.add_argument("--test_dir", type=str, default=None, help="Directory for input images for testing") # srgan, srresnet
 
     opt = parser.parse_args()
 

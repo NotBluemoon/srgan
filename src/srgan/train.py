@@ -29,6 +29,8 @@ def train_srgan (opt):
     project_root = Path(__file__).resolve().parents[2]
     pretrained_gen_path = project_root/'outputs'/'generator_pretrained.pth'
 
+    torch.manual_seed(42)
+    torch.cuda.manual_seed_all(42)
     # wb, ws, log_path = init_log ()
 
     generator = Generator(opt).to(opt.device)
@@ -74,6 +76,7 @@ def train_srgan (opt):
     if any(checkpoint_srgan_path.iterdir()):
         print("Loading SRGAN from checkpoint...")
         current_step = load_srgan_checkpoint(generator, discriminator, optimizer_G, optimizer_D) # update current step
+        current_step += 1 # model loaded is saved end of the step
     else:
         print("Training SRGAN from scratch...")
 

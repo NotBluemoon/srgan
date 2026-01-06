@@ -3,4 +3,4 @@ from src.srgan.test import test_srgan
 
 if __name__ == "__main__":
     opt = parse_args()
-    test_srgan()
+    test_srgan(opt)

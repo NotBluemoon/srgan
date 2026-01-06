@@ -43,6 +43,9 @@ def load_srgan_checkpoint(generator, discriminator, optimizer_G=None, optimizer_
 
     step = int(checkpoint.get("step", 0))
 
+    print(optimizer_G.param_groups[0]['lr'])
+    print(optimizer_D.param_groups[0]['lr'])
+
     return step
 
 
