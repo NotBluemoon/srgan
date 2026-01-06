@@ -298,6 +298,7 @@ Resources that are used or referenced in the development of this project.
 ---
 <details>
 <summary><strong>SRResNet Performance at Different Training Steps, intervals of 2500</strong></summary>
+<br>
 
 |                    Original HR                     |                     2500 steps                     |                     5000 steps                     |
 |:--------------------------------------------------:|:--------------------------------------------------:|:--------------------------------------------------:|
@@ -317,6 +318,7 @@ Resources that are used or referenced in the development of this project.
 
 <details>
 <summary><strong>SRGAN Performance at Different Training Steps before learning rate switch, intervals of 1000</strong></summary>
+<br>
 
 |                               Original HR                               |                   1000 steps                   |                   2000 steps                   |
 |:-----------------------------------------------------------------------:|:----------------------------------------------:|:----------------------------------------------:|
@@ -337,6 +339,7 @@ Resources that are used or referenced in the development of this project.
 <details>
 
 <summary><strong>SRGAN Performance at Different Training Steps after learning rate switch at step 3001, in intervals of 1000 </strong></summary>
+<br>
 
 |                                  Original HR                                  |                                  4000 steps                                   |                                  5000 steps                                   |
 |:-----------------------------------------------------------------------------:|:-----------------------------------------------------------------------------:|:-----------------------------------------------------------------------------:|
@@ -349,7 +352,10 @@ Resources that are used or referenced in the development of this project.
 ---
 
 <details>
+
 <summary><strong>SRGAN Performance at Different Training Steps after learning rate switch at step 3001, between step 5000 and 6000, in intervals of 100</strong></summary>
+<br>
+
 |                                    Original HR                                    |                                    5000 steps                                     |                                    5100 steps                                     |
 |:---------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------:|
 |          <img src="assets/HR.png" style="max-width:100%; height:auto;"/>          | <img src="assets/srgan_after_100/5000.png" style="max-width:100%; height:auto;"/> | <img src="assets/srgan_after_100/5100.png" style="max-width:100%; height:auto;"/> |
