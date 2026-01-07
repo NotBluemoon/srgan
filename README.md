@@ -123,9 +123,9 @@ All metrics are calculated on the y-channel of center cropped, remove of a 4-pix
 
 ---
 
-| (a) Original HR | (b) SRGAN (Paper) | (c) SRGAN (DIV2K) |
-|:---------------:|:-----------------:|:-----------------:|
-| <img src="assets/HR.png" style="max-width:100%; height:auto;"/> | <img src="assets/og_SRGAN.png" style="max-width:100%; height:auto;"/> | <img src="assets/div2k_SRGAN.png" style="max-width:100%; height:auto;"/> |
+| (a) Original HR | (b) SRGAN (Paper) |                                 (c) SRGAN (DIV2K)                                 |
+|:---------------:|:-----------------:|:---------------------------------------------------------------------------------:|
+| <img src="assets/HR.png" style="max-width:100%; height:auto;"/> | <img src="assets/og_SRGAN.png" style="max-width:100%; height:auto;"/> | <img src="assets/srgan_after_100/5300.png" style="max-width:100%; height:auto;"/> |
 
 
 The difference in image quality of the SRGAN used in this implementation is attributed to the number of training steps. 
