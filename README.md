@@ -236,10 +236,11 @@ SRGAN model exist. The SR images can be found in the `results` directory.
 
 #### Inference Arguments
 
-| Argument        | Default | Description |
-|-----------------|---------|-------------|
-| `--infer_model` | None | Path to directory containing LR images to be super-resolved. 
----
+| Argument        | Default | Description                                    |
+|-----------------|---------|------------------------------------------------|
+| `--infer_model` | None | Either 'SRGAN' or 'SRResNet', model to be used for inference. |
+| `--infer_step`  | None | 'final' or the model checkpoint step.          |
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -297,7 +298,7 @@ Resources that are used or referenced in the development of this project.
 
 ---
 <details>
-<summary><strong>SRResNet Performance at Different Training Steps, intervals of 2500</strong></summary>
+<summary><strong>SRResNet Performance (Steps 2500–25000, Δ=2500)</strong></summary>
 <br>
 
 |                    Original HR                     |                     2500 steps                     |                     5000 steps                     |
@@ -307,30 +308,36 @@ Resources that are used or referenced in the development of this project.
 | <img src="assets/srresnet/7500.png" style="max-width:100%; height:auto;"/>  | <img src="assets/srresnet/10000.png" style="max-width:100%; height:auto;"/> | <img src="assets/srresnet/12500.png" style="max-width:100%; height:auto;"/> |
 |                    15000 steps                     |                    17500 steps                     |                    20000 steps                     |
 | <img src="assets/srresnet/15000.png" style="max-width:100%; height:auto;"/> | <img src="assets/srresnet/17500.png" style="max-width:100%; height:auto;"/> | <img src="assets/srresnet/20000.png" style="max-width:100%; height:auto;"/> |
+|||<sub>PSNR 27.72 dB · SSIM 0.7761</sub>|
 
-|                    22500 steps                     |                                **25000 steps**<sup>*</sup>                                |
-|:--------------------------------------------------:|:---------------------------------------------------------------------------:|
+|                                 22500 steps                                 |            25000 steps*             |
+|:---------------------------------------------------------------------------:|:--------------------------------------------------------------------------:|
 | <img src="assets/srresnet/22500.png" style="max-width:100%; height:auto;"/> | <img src="assets/srresnet/25000.png" style="max-width:100%; height:auto;"/> |
+|                   <sub>PSNR 27.80 dB · SSIM 0.7789</sub>                    |                  <sub>PSNR 27.85 dB · SSIM 0.7784</sub>|
 
 </details>
 
 ---
 
 <details>
-<summary><strong>SRGAN Performance at Different Training Steps before learning rate switch, intervals of 1000</strong></summary>
+<summary><strong>SRGAN Performance Before Learning Rate Decay (Steps 1000–10000, Δ=1000)</strong></summary>
 <br>
 
-|                               Original HR                               |                   1000 steps                   |                   2000 steps                   |
-|:-----------------------------------------------------------------------:|:----------------------------------------------:|:----------------------------------------------:|
+|                               Original HR                               |                               1000 steps                                |                               2000 steps                                |
+|:-----------------------------------------------------------------------:|:-----------------------------------------------------------------------:|:-----------------------------------------------------------------------:|
 |     <img src="assets/HR.png" style="max-width:100%; height:auto;"/>     | <img src="assets/srgan/1000.png" style="max-width:100%; height:auto;"/> | <img src="assets/srgan/2000.png" style="max-width:100%; height:auto;"/> |
-|                       **3000 steps**<sup>*</sup>                        |                   4000 steps                   |                   5000 steps                   |
+|                 <sub>PSNR 27.80 dB · SSIM 0.7789</sub>                  |                 <sub>PSNR 20.92 dB · SSIM 0.6041</sub>                  |                 <sub>PSNR 24.07 dB · SSIM 0.6717</sub>                  |
+|                       **3000 steps**<sup>*</sup>                        |                               4000 steps                                |                               5000 steps                                |
 | <img src="assets/srgan/3000.png" style="max-width:100%; height:auto;"/> | <img src="assets/srgan/4000.png" style="max-width:100%; height:auto;"/> | <img src="assets/srgan/5000.png" style="max-width:100%; height:auto;"/> |
-|                               6000 steps                                |                   7000 steps                   |                   8000 steps                   |
+|                 <sub>PSNR 24.09 dB · SSIM 0.7289</sub>                  |                 <sub>PSNR 22.48 dB · SSIM 0.7118</sub>                  |                 <sub>PSNR 21.55 dB · SSIM 0.6727</sub>                  |
+|                               6000 steps                                |                               7000 steps                                |                               8000 steps                                |
 | <img src="assets/srgan/6000.png" style="max-width:100%; height:auto;"/> | <img src="assets/srgan/7000.png" style="max-width:100%; height:auto;"/> | <img src="assets/srgan/8000.png" style="max-width:100%; height:auto;"/> |
+|                 <sub>PSNR 21.04 dB · SSIM 0.6266</sub>                  |                 <sub>PSNR 22.84 dB · SSIM 0.6367</sub>                  |                 <sub>PSNR 23.12 dB · SSIM 0.6467</sub>                  |
 
-|                       9000 steps                                        |                   10000 steps                   |
-|:-----------------------------------------------------------------------:|:-----------------------------------------------:|
+|                               9000 steps                                |                               10000 steps                                |
+|:-----------------------------------------------------------------------:|:------------------------------------------------------------------------:|
 | <img src="assets/srgan/9000.png" style="max-width:100%; height:auto;"/> | <img src="assets/srgan/10000.png" style="max-width:100%; height:auto;"/> |
+|                 <sub>PSNR 22.52 dB · SSIM 0.6504</sub>                  |                  <sub>PSNR 22.24 dB · SSIM 0.6521</sub>                  |
 
 </details>
 
@@ -338,14 +345,16 @@ Resources that are used or referenced in the development of this project.
 
 <details>
 
-<summary><strong>SRGAN Performance at Different Training Steps after learning rate switch at step 3001, in intervals of 1000 </strong></summary>
+<summary><strong>SRGAN Performance After Learning Rate Decay at Step 3001 (Steps 4000–8000, Δ=1000)</strong></summary>
 <br>
 
-|                                  Original HR                                  |                                  4000 steps                                   |                                  5000 steps                                   |
+|                                  Original HR                                  |                                  4000 steps                                   |                                  5000 steps*                                  |
 |:-----------------------------------------------------------------------------:|:-----------------------------------------------------------------------------:|:-----------------------------------------------------------------------------:|
 |        <img src="assets/HR.png" style="max-width:100%; height:auto;"/>        | <img src="assets/srgan_after/4000.png" style="max-width:100%; height:auto;"/> | <img src="assets/srgan_after/5000.png" style="max-width:100%; height:auto;"/> |
+||                    <sub>PSNR 24.32 dB · SSIM 0.6324</sub>                     |                    <sub>PSNR 24.24 dB · SSIM 0.6836</sub>                     |
 |                                  6000 steps                                   |                                  7000 steps                                   |                                  8000 steps                                   |
 | <img src="assets/srgan_after/6000.png" style="max-width:100%; height:auto;"/> | <img src="assets/srgan_after/7000.png" style="max-width:100%; height:auto;"/> | <img src="assets/srgan_after/8000.png" style="max-width:100%; height:auto;"/> |
+|<sub>PSNR 21.35 dB · SSIM 0.6666</sub>  |                    <sub>PSNR 24.57 dB · SSIM 0.6844</sub>                     |                    <sub>PSNR 22.47 dB · SSIM 0.6277</sub>                     |
 
 </details>
 
@@ -353,18 +362,22 @@ Resources that are used or referenced in the development of this project.
 
 <details>
 
-<summary><strong>SRGAN Performance at Different Training Steps after learning rate switch at step 3001, between step 5000 and 6000, in intervals of 100</strong></summary>
+<summary><strong>SRGAN Performance After Learning Rate Decay at Step 3001 (Steps 5000–6000, Δ=100)</strong></summary>
 <br>
 
 |                                    Original HR                                    |                                    5000 steps                                     |                                    5100 steps                                     |
 |:---------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------:|
 |          <img src="assets/HR.png" style="max-width:100%; height:auto;"/>          | <img src="assets/srgan_after_100/5000.png" style="max-width:100%; height:auto;"/> | <img src="assets/srgan_after_100/5100.png" style="max-width:100%; height:auto;"/> |
-|                                    5200 steps                                     |                                    5300 steps                                     |                                    5400 steps                                     |
+|                                                                                   |                      <sub>PSNR 24.24 dB · SSIM 0.6836</sub>                       |                      <sub>PSNR 24.22 dB · SSIM 0.7009</sub>                       |
+|                                    5200 steps                                     |                                    5300 steps*                                    |                                    5400 steps                                     |
 | <img src="assets/srgan_after_100/5200.png" style="max-width:100%; height:auto;"/> | <img src="assets/srgan_after_100/5300.png" style="max-width:100%; height:auto;"/> | <img src="assets/srgan_after_100/5400.png" style="max-width:100%; height:auto;"/> |
+|                      <sub>PSNR 24.47 dB · SSIM 0.7154</sub>                       |                      <sub>PSNR 24.15 dB · SSIM 0.7195</sub>                       |                      <sub>PSNR 24.58 dB · SSIM 0.7122</sub>                       |
 |                                    5500 steps                                     |                                    5600 steps                                     |                                    5700 steps                                     |
 | <img src="assets/srgan_after_100/5500.png" style="max-width:100%; height:auto;"/> | <img src="assets/srgan_after_100/5600.png" style="max-width:100%; height:auto;"/> | <img src="assets/srgan_after_100/5700.png" style="max-width:100%; height:auto;"/> |
+|                      <sub>PSNR 23.59 dB · SSIM 0.6785</sub>                       |                                                                                   |                                                                                   |
 |                                    5800 steps                                     |                                    5900 steps                                     |                                    6000 steps                                     |
 | <img src="assets/srgan_after_100/5800.png" style="max-width:100%; height:auto;"/> | <img src="assets/srgan_after_100/5900.png" style="max-width:100%; height:auto;"/> | <img src="assets/srgan_after_100/6000.png" style="max-width:100%; height:auto;"/> |
+||                                                                                   |                      <sub>PSNR 21.35 dB · SSIM 0.6666</sub>                       |
 
 </details>
 

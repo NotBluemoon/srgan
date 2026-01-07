@@ -9,38 +9,26 @@ import torch
 import torch.nn.functional as F
 import torchvision.transforms.functional as TF
 from PIL import Image
-from skimage.metrics import structural_similarity as skimage_ssim
+from skimage.metrics import structural_similarity, peak_signal_noise_ratio
 
 
 def compute_psnr (sr, hr, eps: float = 1e-10):
-    sr_y = _rgb_to_y(sr)
-    hr_y = _rgb_to_y(hr)
-    mse = F.mse_loss(sr_y, hr_y).item()
-    mse = max(mse, eps)
-    return 10.0 * torch.log10(torch.tensor(1.0 / mse)).item()
+    return peak_signal_noise_ratio(sr, hr, data_range=1.0)
 
 
 def compute_ssim (sr, hr):
-    # squeeze to [0, 1]
-    sr = sr.squeeze(0).permute(1,2,0).cpu().numpy()
-    hr = hr.squeeze(0).permute(1,2,0).cpu().numpy()
-
-    # Convert to Y channel (BT.601)
-    sr_y = 16/255 + (65.481*sr[:,:,0] + 128.553*sr[:,:,1] + 24.966*sr[:,:,2]) / 255
-    hr_y = 16/255 + (65.481*hr[:,:,0] + 128.553*hr[:,:,1] + 24.966*hr[:,:,2]) / 255
-
-    return skimage_ssim(sr_y, hr_y, data_range=1.0)
+    return structural_similarity(sr, hr, data_range=1.0)
 
 
-def _rgb_to_y (x):
-    """
-    Convert RGB tensor in [0,1] to luminance (Y) using BT.601
-    """
-    r, g, b = x[:,0:1], x[:,1:2], x[:,2:3]
-    r255, g255, b255 = r * 255.0, g * 255.0, b * 255.0
-    y = (16.0 + 65.481 * r255 + 128.553 * g255 + 24.966 * b255) / 255.0
-
-    return y
+# def _rgb_to_y (x):
+#     """
+#     Convert RGB tensor in [0,1] to luminance (Y) using BT.601
+#     """
+#     r, g, b = x[:,0:1], x[:,1:2], x[:,2:3]
+#     r255, g255, b255 = r * 255.0, g * 255.0, b * 255.0
+#     y = (16.0 + 65.481 * r255 + 128.553 * g255 + 24.966 * b255) / 255.0
+#
+#     return y
 
 
 def shave_border(x, border=4):
@@ -87,18 +75,27 @@ def test_srgan (opt):
 
         if hr_img_path.exists():
             sr = Image.open(sr_img_path).convert('RGB')
-            sr = TF.to_tensor(sr).unsqueeze(0) # range of [0, 1]
+            sr = TF.to_tensor(sr).unsqueeze(0) # [0, 1]
 
             hr = Image.open(hr_img_path).convert('RGB')
-            hr = TF.to_tensor(hr).unsqueeze(0) # range of [0, 1]
+            hr = TF.to_tensor(hr).unsqueeze(0) # [0, 1]
 
             sr, hr = centre_crop(sr, hr)
 
             sr = shave_border(sr)
             hr = shave_border(hr)
 
-            psnr = compute_psnr(sr, hr)
-            ssim = compute_ssim(sr, hr)
+            sr = sr.squeeze(0)
+            hr = hr.squeeze(0)
+
+            sr_y = 16/255 + (65.481*sr[0] + 128.553*sr[1] + 24.966*sr[2]) / 255
+            hr_y = 16/255 + (65.481*hr[0] + 128.553*hr[1] + 24.966*hr[2]) / 255
+
+            sr_y = sr_y.cpu().numpy()
+            hr_y = hr_y.cpu().numpy()
+
+            psnr = compute_psnr(sr_y, hr_y)
+            ssim = compute_ssim(sr_y, hr_y)
 
             psnr_array.append(psnr)
             ssim_array.append(ssim)
