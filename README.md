@@ -86,27 +86,48 @@ My goal is to develop a clean PyTorch project that I can use as a reference in t
 * ``Adam β1 = 0.9``
 * ``Pretrain learning rate = 0.0001``
 * ``Range of LR images: [0, 1], HR images: [-1, 1]``
-* ``Content loss: ``
-$$
-\mathcal{l}_{\text{VGG}/i,j}^{\text{SR}} =
-\frac{1}{12.75}
-\frac{1}{W_{i,j} H_{i,j}}
-\sum_{x=1}^{W_{i,j}} \sum_{y=1}^{H_{i,j}}
-\left(
-\phi_{i,j}(I^{HR})_{x,y}-
-\phi_{i,j}(G_{\theta_G}(I^{LR}))_{x,y}
-\right)^2
-$$
-    * Mean squared loss between the features of reconstructed and reference image, extracted with VGG54 derived from VGG19, 
-then scaled with a factor of 1/12.75 to match pixel loss. <br></br>
-* ``Adversarial loss:``
-$$
-\mathcal{l}_{\text{adv}} =
-\sum_{n=1}^{N}
-\left(-\log D_{\theta_D}(G_{\theta_G}(I_n^{LR}))
-\right)
-$$
-    * Achieved using binary cross entropy with target tensor set to 1 and reduction set to sum
+
+[//]: # (* ``Content loss: ``)
+
+[//]: # ($$)
+
+[//]: # (\mathcal{l}_{\text{VGG}/i,j}^{\text{SR}} =)
+
+[//]: # (\frac{1}{12.75})
+
+[//]: # (\frac{1}{W_{i,j} H_{i,j}})
+
+[//]: # (\sum_{x=1}^{W_{i,j}} \sum_{y=1}^{H_{i,j}})
+
+[//]: # (\left&#40;)
+
+[//]: # (\phi_{i,j}&#40;I^{HR}&#41;_{x,y}-)
+
+[//]: # (\phi_{i,j}&#40;G_{\theta_G}&#40;I^{LR}&#41;&#41;_{x,y})
+
+[//]: # (\right&#41;^2)
+
+[//]: # ($$)
+
+[//]: # (    * Mean squared loss between the features of reconstructed and reference image, extracted with VGG54 derived from VGG19, )
+
+[//]: # (then scaled with a factor of 1/12.75 to match pixel loss. <br></br>)
+
+[//]: # (* ``Adversarial loss:``)
+
+[//]: # ($$)
+
+[//]: # (\mathcal{l}_{\text{adv}} =)
+
+[//]: # (\sum_{n=1}^{N})
+
+[//]: # (\left&#40;-\log D_{\theta_D}&#40;G_{\theta_G}&#40;I_n^{LR}&#41;&#41;)
+
+[//]: # (\right&#41;)
+
+[//]: # ($$)
+
+[//]: # (    * Achieved using binary cross entropy with target tensor set to 1 and reduction set to sum)
 
 ---
 
